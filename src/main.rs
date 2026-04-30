@@ -4,6 +4,8 @@ mod memory_device;
 use cpu::Cpu;
 use memory_device::*;
 
+mod instructions;
+
 fn main() {
     let instr: u32 = 0b0000000_00010_00001_000_00011_0110011;
 

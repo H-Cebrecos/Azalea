@@ -47,7 +47,7 @@ impl MemoryDevice for Ram {
     }
 
     fn contains_addr(&self, addr: u32) -> bool {
-        return addr >= self.start && addr < self.start + self.data.len() as u32;
+        addr >= self.start && addr < self.start + self.data.len() as u32
     }
 }
 
@@ -89,6 +89,6 @@ impl MemoryDevice for Rom {
     }
 
     fn contains_addr(&self, addr: u32) -> bool {
-        return addr >= self.start && addr < self.start + self.data.len() as u32;
+        addr >= self.start && addr < self.start + self.data.len() as u32
     }
 }
