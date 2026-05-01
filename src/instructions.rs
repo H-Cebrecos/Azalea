@@ -1,3 +1,5 @@
+use crate::instructions::bits::rd;
+
 #[derive(Debug, Clone, Copy)]
 pub enum Instruction {
     Lui {
@@ -18,37 +20,31 @@ pub enum Instruction {
         imm: u32,
     },
     Beq {
-        rd: u8,
         rs1: u8,
         rs2: u8,
         imm: u32,
     },
     Bne {
-        rd: u8,
         rs1: u8,
         rs2: u8,
         imm: u32,
     },
     Blt {
-        rd: u8,
         rs1: u8,
         rs2: u8,
         imm: u32,
     },
     Bge {
-        rd: u8,
         rs1: u8,
         rs2: u8,
         imm: u32,
     },
     Bltu {
-        rd: u8,
         rs1: u8,
         rs2: u8,
         imm: u32,
     },
     Bgeu {
-        rd: u8,
         rs1: u8,
         rs2: u8,
         imm: u32,
@@ -179,20 +175,49 @@ pub enum Instruction {
 mod opcode {
     pub const ADD: u8 = 0x33;
 }
+
+mod bits {
+    #[inline]
+    pub fn rd(x: u32) -> u8 {
+        ((x >> 7) & 0x1f) as u8
+    }
+
+    #[inline]
+    pub fn rs1(x: u32) -> u8 {
+        ((x >> 15) & 0x1f) as u8
+    }
+
+    #[inline]
+    pub fn rs2(x: u32) -> u8 {
+        ((x >> 20) & 0x1f) as u8
+    }
+
+    #[inline]
+    pub fn funct3(x: u32) -> u32 {
+        (x >> 12) & 0x7
+    }
+
+    #[inline]
+    pub fn funct7(x: u32) -> u32 {
+        (x >> 25) & 0x7f
+    }
+}
+
 impl From<u32> for Instruction {
     fn from(value: u32) -> Self {
+        use bits::*;
         let opcode = (value & 0x7f) as u8;
 
         match opcode {
             opcode::ADD => {
                 // R-type
-                let rd = ((value >> 7) & 0x1f) as u8;
-                let rs1 = ((value >> 15) & 0x1f) as u8;
-                let rs2 = ((value >> 20) & 0x1f) as u8;
-                let funct3 = (value >> 12) & 0x7;
-                let funct7 = (value >> 25) & 0x7f;
-                if funct3 == 0x0 && funct7 == 0x00 {
-                    return Instruction::Add { rd, rs1, rs2 };
+
+                if funct3(value) == 0x0 && funct7(value) == 0x00 {
+                    return Instruction::Add {
+                        rd: rd(value),
+                        rs1: rs1(value),
+                        rs2: rs2(value),
+                    };
                 }
                 todo!()
             }
