@@ -19,9 +19,6 @@ fn main() {
     let ram = Ram::new(0x1000, 1024 * 1024);
     let mut bus = Bus::new();
 
-    bus.add_device(Box::new(rom));
-    bus.add_device(Box::new(ram));
-
-    cpu.run(&mut bus);
-    println!("Core paused execution by executing a system instruction.")
+    bus.add_device(rom);
+    bus.add_device(ram);
 }

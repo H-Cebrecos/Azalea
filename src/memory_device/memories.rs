@@ -15,8 +15,8 @@ impl Ram {
 }
 
 impl MemoryDevice for Ram {
-    fn load(&mut self, offset: u32, size: AccessSize) -> u32 {
-        let i = offset as usize;
+    fn load(&mut self, addr: u32, size: AccessSize) -> u32 {
+        let i = (addr - self.start) as usize;
 
         match size {
             AccessSize::Byte => self.data[i] as u32,
@@ -31,8 +31,8 @@ impl MemoryDevice for Ram {
         }
     }
 
-    fn store(&mut self, offset: u32, size: AccessSize, value: u32) {
-        let i = offset as usize;
+    fn store(&mut self, addr: u32, size: AccessSize, value: u32) {
+        let i = (addr - self.start) as usize;
 
         match size {
             AccessSize::Byte => {
@@ -67,8 +67,8 @@ impl Rom {
 }
 
 impl MemoryDevice for Rom {
-    fn load(&mut self, offset: u32, size: AccessSize) -> u32 {
-        let i = offset as usize;
+    fn load(&mut self, addr: u32, size: AccessSize) -> u32 {
+        let i = (addr - self.start) as usize;
 
         match size {
             AccessSize::Byte => self.data[i] as u32,
@@ -83,8 +83,8 @@ impl MemoryDevice for Rom {
         }
     }
 
-    fn store(&mut self, offset: u32, size: AccessSize, value: u32) {
-        _ = offset;
+    fn store(&mut self, addr: u32, size: AccessSize, value: u32) {
+        _ = addr;
         _ = size;
         _ = value;
     }

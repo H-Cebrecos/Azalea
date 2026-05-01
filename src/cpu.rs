@@ -121,6 +121,25 @@ impl Cpu32 {
                 Instruction::Addi { rd, rs1, imm } => {
                     self.regs[usize::from(rd)] = self.regs[usize::from(rs1)].wrapping_add(imm);
                 }
+                Instruction::Slti { rd, rs1, imm } => {
+                    self.regs[rd as usize] = if (self.regs[rs1 as usize] as i32) < (imm as i32) {
+                        1
+                    } else {
+                        0
+                    };
+                }
+                Instruction::Sltiu { rd, rs1, imm } => {
+                    self.regs[rd as usize] = if self.regs[rs1 as usize] < imm { 1 } else { 0 };
+                }
+                Instruction::Xori { rd, rs1, imm } => {
+                    self.regs[rd as usize] = self.regs[rs1 as usize] ^ imm;
+                }
+                Instruction::Ori { rd, rs1, imm } => {
+                    self.regs[rd as usize] = self.regs[rs1 as usize] | imm;
+                }
+                Instruction::Andi { rd, rs1, imm } => {
+                    self.regs[rd as usize] = self.regs[rs1 as usize] & imm;
+                }
                 Instruction::Slli { rd, rs1, shamt } => {
                     self.regs[usize::from(rd)] = self.regs[usize::from(rs1)] << shamt;
                 }
@@ -194,12 +213,7 @@ impl Cpu32 {
                     _ = fm;
                 }
                 Instruction::FenceTso => (),
-                Instruction::Pause => {
-                    must_break = true;
-                }
-                Instruction::Ecall => must_break = true,
-                Instruction::Ebreak => must_break = true,
-                _ => panic!("unimplemented opcode"),
+                Instruction::Pause | Instruction::Ebreak | Instruction::Ecall => must_break = true,
             };
 
             self.regs[0] = 0;

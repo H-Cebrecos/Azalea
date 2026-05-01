@@ -11,8 +11,8 @@ impl Bus {
         }
     }
 
-    pub fn add_device(&mut self, dev: Box<dyn MemoryDevice>) {
-        self.devices.push(dev);
+    pub fn add_device(&mut self, dev: impl MemoryDevice + 'static) {
+        self.devices.push(Box::new(dev));
     }
 
     fn find_device(&mut self, addr: u32) -> &mut dyn MemoryDevice {
