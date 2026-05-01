@@ -221,6 +221,31 @@ impl From<u32> for Instruction {
                 }
                 todo!()
             }
+            0x0F => {
+                let funct3 = (value >> 12) & 0x7;
+                let rd = ((value >> 7) & 0x1f) as u8;
+                let rs1 = ((value >> 15) & 0x1f) as u8;
+                let imm = (value >> 20) & 0xfff;
+
+                if funct3 == 0 {
+                    if rd == 0 && rs1 == 0 {
+                        // PAUSE encoding check (standard pattern)
+                        if imm == 0x0010 {
+                            return Instruction::Pause;
+                        }
+
+                        return Instruction::Fence {
+                            rd,
+                            rs1,
+                            succ: ((imm >> 4) & 0xf) as u8,
+                            pred: (imm & 0xf) as u8,
+                            fm: ((imm >> 8) & 0xf) as u8,
+                        };
+                    }
+                }
+
+                todo!("unimplemented MISC-MEM variant")
+            }
             _ => todo!(),
         }
     }

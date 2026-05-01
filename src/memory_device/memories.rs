@@ -1,4 +1,5 @@
-use crate::memory_device::*;
+use super::*;
+
 pub struct Ram {
     start: u32,
     data: Vec<u8>,

@@ -1,4 +1,4 @@
-use crate::memory_device::*;
+use super::*;
 
 pub struct Bus {
     devices: Vec<Box<dyn MemoryDevice>>,
@@ -16,11 +16,15 @@ impl Bus {
     }
 
     fn find_device(&mut self, addr: u32) -> &mut dyn MemoryDevice {
-        self.devices
-            .iter_mut()
-            .find(|d| d.contains_addr(addr))
-            .expect("no device mapped for address")
-            .as_mut()
+        let dev = self.devices.iter_mut().find(|d| d.contains_addr(addr));
+
+        match dev {
+            Some(d) => d.as_mut(),
+            None => {
+                eprintln!("invalid memory access at 0x{:08x}", addr);
+                panic!("no device mapped for address");
+            }
+        }
     }
 }
 
