@@ -1,6 +1,8 @@
 mod memories;
 pub use memories::*;
 
+pub mod peripherals;
+
 mod bus;
 pub use bus::*;
 
