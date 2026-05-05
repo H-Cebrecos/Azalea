@@ -27,11 +27,15 @@ impl MemoryDevice for SimpleUart {
 
     fn store(&mut self, addr: u32, _size: AccessSize, value: u32) {
         if addr - self.base == 0x00 {
+            println!("{}", value as u8 as char);
             self.backend.write_byte(value as u8);
         }
     }
 
     fn contains_addr(&self, addr: u32) -> bool {
+        if addr < self.base {
+            return false;
+        }
         let off = addr - self.base;
         off < 8
     }

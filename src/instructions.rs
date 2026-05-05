@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 #[derive(Debug, Clone, Copy)]
 pub enum Instruction {
     Lui {
@@ -400,9 +402,13 @@ impl From<u32> for Instruction {
                 (0x5, 0x20) => Instruction::Sra { rd, rs1, rs2 },
                 _ => panic!("illegal R-type"),
             },
-            opcode::SYSTEM => {
-                todo!()
-            }
+            opcode::SYSTEM => match f3 {
+                _ => Instruction::Add {
+                    rd: 0,
+                    rs1: 0,
+                    rs2: 0,
+                },
+            },
             opcode::AUIPC => Instruction::Auipc {
                 rd,
                 imm: fields::u_type_imm(value),
