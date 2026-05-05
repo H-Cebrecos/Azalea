@@ -40,8 +40,6 @@ pub fn load(path: &str, mem: &mut impl MemoryDevice) -> u32 {
 
     let hdr = elf.get_hdr();
 
-    println!("entry = 0x{:08x}", hdr.entry as u32);
-
     for i in 0..hdr.ph_entry_num {
         let ph = elf.get_program_hdr(i).unwrap();
 
