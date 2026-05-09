@@ -195,6 +195,7 @@ pub enum Instruction {
     Ebreak,
 }
 
+#[allow(unused)]
 mod opcode {
     pub const LOAD: u8 = 0b0_00_000_11;
     pub const STORE: u8 = 0b0_01_000_11;

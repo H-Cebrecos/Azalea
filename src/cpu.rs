@@ -36,7 +36,6 @@ impl Cpu32 {
 
                 Instruction::Jal { rd, imm } => {
                     let ret = self.pc.wrapping_add(4);
-                    let target = self.pc.wrapping_add(imm);
 
                     self.regs[rd as usize] = ret;
                     pc_delta = imm;

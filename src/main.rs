@@ -1,12 +1,8 @@
-mod cpu;
-mod hooks;
-mod loader;
-mod memory_device;
+use azalea::cpu::Cpu32;
+use azalea::loader::load;
+use azalea::memory_device::*;
 
-use cpu::Cpu32;
-use memory_device::*;
-
-use crate::{
+use azalea::{
     hooks::{BranchKind, CpuHooks},
     instructions::Instruction,
 };
@@ -71,7 +67,7 @@ fn main() {
     bus.add_device(ram);
     bus.add_device(uart);
 
-    let start = loader::load(
+    let start = load(
         "F:/lab/rust/Azalea-Emulator/test-app/target/riscv32i-unknown-none-elf/debug/test-app",
         &mut bus,
     );
